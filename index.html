@@ -13,23 +13,23 @@
 <body>
 <header class="top">
   <div class="top-inner">
-    <a class="brand" href="#overview" aria-label="美股观察台首页"><img src="mark.svg" width="36" height="36" alt=""><span>美股观察台<small>MARKET OBSERVER</small></span></a>
+    <a class="brand" href="#live" aria-label="美股观察台首页"><img src="mark.svg" width="36" height="36" alt=""><span>美股观察台<small>MARKET OBSERVER</small></span></a>
     <nav aria-label="主要导航">
-      <button id="nav-overview" data-view="overview" aria-current="page">日线工作台</button>
-      <button id="nav-live" data-view="live">在线行情 <span aria-hidden="true">↗</span></button>
+      <button id="nav-live" data-view="live" aria-current="page">在线行情</button>
+      <button id="nav-overview" data-view="overview">日线工作台</button>
     </nav>
     <div class="top-actions">
-      <button class="button search-trigger" id="search-open" title="搜索证券"><span class="icon" data-icon="search"></span><span>搜索代码</span><kbd>/</kbd></button>
+      <button class="button search-trigger" id="search-open" title="搜索证券" hidden><span class="icon" data-icon="search"></span><span>搜索代码</span><kbd>/</kbd></button>
       <button class="button accent" id="import-open"><span class="icon" data-icon="upload"></span><span>导入 CSV</span></button>
     </div>
   </div>
 </header>
 <main class="container">
-  <div id="overview">
+  <div id="overview" hidden>
     <section class="masthead" aria-labelledby="overview-title">
       <div><div class="eyebrow"><span></span> U.S. EQUITIES <i></i> MARKET DASHBOARD</div>
-        <h1 id="overview-title">市场概览</h1>
-        <p>跟踪美股与 ETF 的日线走势、成交量及自选表现。</p>
+        <h1 id="overview-title">日线工作台</h1>
+        <p>分析日线走势和成交量。可导入实际交易数据，也可用演示数据体验功能。</p>
       </div>
       <div class="mast-aside"><button class="badge" id="source-badge" type="button" title="查看或切换数据来源"></button><div id="market-date"></div></div>
       <svg class="mast-chart" aria-hidden="true" viewBox="0 0 500 125" preserveAspectRatio="none"><path d="M0 105 49 87 79 97 118 65 145 76 178 53 217 60 254 34 291 52 327 36 355 48 393 24 424 34 460 13 500 18V125H0Z" fill="url(#mast-fill)"/><path d="M0 105 49 87 79 97 118 65 145 76 178 53 217 60 254 34 291 52 327 36 355 48 393 24 424 34 460 13 500 18" fill="none" stroke="#36d9b5" stroke-width="1"/><defs><linearGradient id="mast-fill" x2="0" y2="1"><stop stop-color="#29dcb1" stop-opacity=".24"/><stop offset="1" stop-color="#29dcb1" stop-opacity="0"/></linearGradient></defs></svg>
@@ -69,14 +69,14 @@
     </section>
     <footer class="footer"><span id="data-foot"></span><button class="text-button" id="source-open">数据口径 <span aria-hidden="true">↗</span></button></footer>
   </div>
-  <div id="live" hidden>
+  <div id="live">
     <section class="masthead live-mast">
-      <div><div class="eyebrow"><span></span> U.S. EQUITIES <i></i> ONLINE QUOTES</div><h1>在线行情</h1><p>由 TradingView 提供行情。覆盖范围、价格口径与延迟以组件标示为准。</p></div>
+      <div><div class="eyebrow"><span></span> U.S. EQUITIES <i></i> ONLINE QUOTES</div><h1>市场概览</h1><p>查看美股与 ETF 的实际行情。交易所、价格口径和延迟以 TradingView 组件标示为准。</p></div>
       <div class="mast-aside"><span class="badge online-badge"><span></span> TradingView</span><a class="text-button" href="https://www.tradingview.com/markets/stocks-usa/" target="_blank" rel="noopener">打开美股行情 ↗</a></div>
     </section>
     <div class="panel online-tape" id="tape" aria-label="行情滚动条"></div>
     <section class="panel online-panel" aria-labelledby="online-title">
-      <div class="panel-head"><div><h2 id="online-title">行情图表</h2><p>可在图表内切换周期和证券</p></div><button id="reload-market" class="button"><span class="icon" data-icon="refresh"></span>重载组件</button></div>
+      <div class="panel-head"><div><h2 id="online-title">行情图表</h2><p>在图表左上角搜索证券，或点击下方代码切换</p></div><button id="reload-market" class="button"><span class="icon" data-icon="refresh"></span>重载组件</button></div>
       <div id="online-shortcuts" class="online-shortcuts"></div>
       <div id="online-chart" aria-label="TradingView 行情图"></div>
       <div class="online-foot"><span id="online-status" role="status">正在请求行情组件</span><a id="external-symbol" class="text-button" href="https://www.tradingview.com/symbols/NASDAQ-AAPL/" target="_blank" rel="noopener">在 TradingView 查看 ↗</a></div>
