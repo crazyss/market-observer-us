@@ -213,6 +213,7 @@ function showView(view, updateUrl = true) {
   const online = view === 'live';
   $('overview').hidden = online;
   $('live').hidden = !online;
+  $('search-open').hidden = online;
   $('nav-overview').toggleAttribute('aria-current', !online);
   $('nav-live').toggleAttribute('aria-current', online);
   (online ? $('nav-live') : $('nav-overview')).setAttribute('aria-current', 'page');
@@ -288,17 +289,17 @@ $('import-form').addEventListener('submit', async event => {
   }
 });
 document.addEventListener('keydown', event => {
-  if (event.key === '/' && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest('input, textarea, [contenteditable]') && !document.querySelector('dialog[open]')) {
+  if (!$('overview').hidden && event.key === '/' && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest('input, textarea, [contenteditable]') && !document.querySelector('dialog[open]')) {
     event.preventDefault();
     openSearch();
   }
 });
-window.addEventListener('hashchange', () => showView(location.hash === '#live' ? 'live' : 'overview', false));
+window.addEventListener('hashchange', () => showView(location.hash === '#overview' ? 'overview' : 'live', false));
 new ResizeObserver(() => {
   if (!$('overview').hidden && visibleRows.length) renderChart();
 }).observe($('chart-space'));
 
 render();
-showView(location.hash === '#live' ? 'live' : 'overview', false);
+showView(location.hash === '#overview' ? 'overview' : 'live', false);
 
 $('source-badge').addEventListener('click', () => $('source-dialog').showModal());
