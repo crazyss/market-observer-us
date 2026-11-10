@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b111c">
+  <meta name="description" content="观察美股与 ETF 行情，维护自选列表，导入并分析日线数据。">
+  <title>美股观察台 · MARKET OBSERVER</title>
+  <link rel="icon" href="mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="#overview" aria-label="美股观察台首页"><img src="mark.svg" width="36" height="36" alt=""><span>美股观察台<small>MARKET OBSERVER</small></span></a>
+    <nav aria-label="主要导航">
+      <button id="nav-overview" data-view="overview" aria-current="page">日线工作台</button>
+      <button id="nav-live" data-view="live">在线行情 <span aria-hidden="true">↗</span></button>
+    </nav>
+    <div class="top-actions">
+      <button class="button search-trigger" id="search-open" title="搜索证券"><span class="icon" data-icon="search"></span><span>搜索代码</span><kbd>/</kbd></button>
+      <button class="button accent" id="import-open"><span class="icon" data-icon="upload"></span><span>导入 CSV</span></button>
+    </div>
+  </div>
+</header>
+<main class="container">
+  <div id="overview">
+    <section class="masthead" aria-labelledby="overview-title">
+      <div><div class="eyebrow"><span></span> U.S. EQUITIES <i></i> MARKET DASHBOARD</div>
+        <h1 id="overview-title">市场概览</h1>
+        <p>跟踪美股与 ETF 的日线走势、成交量及自选表现。</p>
+      </div>
+      <div class="mast-aside"><button class="badge" id="source-badge" type="button" title="查看或切换数据来源"></button><div id="market-date"></div></div>
+      <svg class="mast-chart" aria-hidden="true" viewBox="0 0 500 125" preserveAspectRatio="none"><path d="M0 105 49 87 79 97 118 65 145 76 178 53 217 60 254 34 291 52 327 36 355 48 393 24 424 34 460 13 500 18V125H0Z" fill="url(#mast-fill)"/><path d="M0 105 49 87 79 97 118 65 145 76 178 53 217 60 254 34 291 52 327 36 355 48 393 24 424 34 460 13 500 18" fill="none" stroke="#36d9b5" stroke-width="1"/><defs><linearGradient id="mast-fill" x2="0" y2="1"><stop stop-color="#29dcb1" stop-opacity=".24"/><stop offset="1" stop-color="#29dcb1" stop-opacity="0"/></linearGradient></defs></svg>
+    </section>
+    <section aria-labelledby="benchmark-title">
+      <div class="section-line"><h2 id="benchmark-title">基准与风向标</h2><span id="benchmark-note"></span></div>
+      <div class="benchmarks" id="benchmarks"></div>
+    </section>
+    <div class="workspace">
+      <section class="panel analysis" aria-labelledby="symbol-heading">
+        <div id="instrument" class="instrument"></div>
+        <div class="chart-controls">
+          <div id="ranges" class="segments" aria-label="图表时间范围">
+            <button data-range="21">1 月</button><button data-range="63">3 月</button><button data-range="126">6 月</button><button data-range="252">1 年</button>
+          </div>
+          <div id="styles" class="segments" aria-label="图表样式">
+            <button data-style="line"><span class="icon" data-icon="line"></span>走势</button><button data-style="candle"><span class="icon" data-icon="candles"></span>K 线</button>
+          </div>
+        </div>
+        <div class="chart-space" id="chart-space">
+          <svg id="chart" role="img" aria-label="收盘价与成交量图" tabindex="0"></svg>
+          <div id="chart-tooltip" role="status" hidden></div>
+        </div>
+        <div id="chart-stats" class="chart-stats"></div>
+      </section>
+      <aside class="panel watch" aria-labelledby="watch-heading">
+        <div class="panel-head"><div><h2 id="watch-heading">我的自选 <span id="watch-count" class="count"></span></h2><p>点击证券查看走势</p></div><button class="button square" id="watch-add" title="添加或移除自选" aria-label="管理自选"><span class="icon" data-icon="plus"></span></button></div>
+        <div class="watch-labels"><span>证券</span><span>收盘 / 日涨跌</span></div>
+        <div id="watch-list"></div>
+        <div class="watch-foot"><span class="icon" data-icon="bookmark"></span><span>自选保存在当前浏览器</span></div>
+      </aside>
+    </div>
+    <section class="panel records" aria-labelledby="records-title">
+      <div class="panel-head"><div><h2 id="records-title">日线明细</h2><p id="records-note"></p></div><button id="export" class="button"><span class="icon" data-icon="download"></span>导出区间</button></div>
+      <div class="table-wrap"><table><thead><tr><th scope="col">交易日</th><th scope="col">开盘</th><th scope="col">最高</th><th scope="col">最低</th><th scope="col">收盘</th><th scope="col">日涨跌</th><th scope="col">成交量</th></tr></thead><tbody id="records-body"></tbody></table></div>
+      <div class="record-foot"><button class="button text-button" id="more-rows"></button><span id="record-count"></span></div>
+    </section>
+    <footer class="footer"><span id="data-foot"></span><button class="text-button" id="source-open">数据口径 <span aria-hidden="true">↗</span></button></footer>
+  </div>
+  <div id="live" hidden>
+    <section class="masthead live-mast">
+      <div><div class="eyebrow"><span></span> U.S. EQUITIES <i></i> ONLINE QUOTES</div><h1>在线行情</h1><p>由 TradingView 提供行情。覆盖范围、价格口径与延迟以组件标示为准。</p></div>
+      <div class="mast-aside"><span class="badge online-badge"><span></span> TradingView</span><a class="text-button" href="https://www.tradingview.com/markets/stocks-usa/" target="_blank" rel="noopener">打开美股行情 ↗</a></div>
+    </section>
+    <div class="panel online-tape" id="tape" aria-label="行情滚动条"></div>
+    <section class="panel online-panel" aria-labelledby="online-title">
+      <div class="panel-head"><div><h2 id="online-title">行情图表</h2><p>可在图表内切换周期和证券</p></div><button id="reload-market" class="button"><span class="icon" data-icon="refresh"></span>重载组件</button></div>
+      <div id="online-shortcuts" class="online-shortcuts"></div>
+      <div id="online-chart" aria-label="TradingView 行情图"></div>
+      <div class="online-foot"><span id="online-status" role="status">正在请求行情组件</span><a id="external-symbol" class="text-button" href="https://www.tradingview.com/symbols/NASDAQ-AAPL/" target="_blank" rel="noopener">在 TradingView 查看 ↗</a></div>
+    </section>
+  </div>
+</main>
+<dialog id="search-dialog" class="dialog">
+  <div class="dialog-head"><div><h2>搜索与自选</h2><p>选择证券查看图表，点击星标管理自选。</p></div><button class="button square close-dialog" aria-label="关闭"><span class="icon" data-icon="close"></span></button></div>
+  <label class="field search-field"><span class="icon" data-icon="search"></span><input id="symbol-query" type="search" placeholder="输入代码或名称，例如 NVDA" aria-label="证券代码或名称" autocomplete="off"></label>
+  <div id="search-results" class="search-results"></div>
+</dialog>
+<dialog id="import-dialog" class="dialog">
+  <div class="dialog-head"><div><h2>导入日线 CSV</h2><p>一次导入一个证券。再次导入同一代码会替换原文件的数据。</p></div><button class="button square close-dialog" aria-label="关闭"><span class="icon" data-icon="close"></span></button></div>
+  <form id="import-form">
+    <label class="field-label">证券代码<input id="import-symbol" required maxlength="18" placeholder="例如 AAPL" autocomplete="off"></label>
+    <label class="field-label">日线文件<input id="import-file" type="file" accept=".csv,text/csv" required></label>
+    <div class="import-help">必需列 <code>date,open,high,low,close,volume</code><br>日期用 YYYY-MM-DD，价格单位为 USD，成交量单位为股。至少 2 个交易日，文件上限 2 MB。导入数据保存在当前浏览器。</div>
+    <p id="import-error" class="error" role="alert" hidden></p>
+    <div class="dialog-actions"><button id="example" class="button" type="button"><span class="icon" data-icon="download"></span>下载示例</button><button class="button accent" type="submit">导入并查看</button></div>
+  </form>
+</dialog>
+<dialog id="source-dialog" class="dialog">
+  <div class="dialog-head"><div><h2>数据口径</h2><p>美股观察台 · 日线工作台</p></div><button class="button square close-dialog" aria-label="关闭"><span class="icon" data-icon="close"></span></button></div>
+  <dl class="definitions">
+    <dt>演示数据</dt><dd>用于体验平台功能的合成日线。日期和价格均不代表实际交易记录。</dd>
+    <dt>本地 CSV</dt><dd>展示导入的原始数值。复权方式和数据质量由源文件决定。导入的日线与演示数据分开显示。</dd>
+    <dt>日涨跌</dt><dd>当日收盘价 ÷ 上一条日线的收盘价 − 1。缺少前一条时显示“—”。</dd>
+    <dt>区间统计</dt><dd>1 月、3 月、6 月和 1 年分别取最近 21、63、126 和 252 条日线。区间涨跌以首尾收盘价计算。区间高低取每日最高与最低。平均日成交量按区间内的记录数计算。</dd>
+  </dl>
+  <div class="dialog-actions"><button id="switch-demo" class="button" type="button">查看演示数据</button><button id="switch-csv" class="button accent" type="button">查看导入数据</button></div>
+</dialog>
+<div id="toast" role="status" hidden></div>
+</body>
+</html>
